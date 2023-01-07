@@ -1,0 +1,28 @@
+-- Detects when a player has the RPG in their Backpack, when its equipped (Click f9) | created by is#0999
+
+local players = game:GetService("Players")
+local reportedPlayers = {}
+
+players.ChildRemoved:Connect(function(child)
+	reportedPlayers[child] = nil
+end)
+
+while true do
+	for _, player in pairs(players:GetChildren()) do
+		local backpack = player:WaitForChild("Backpack")
+		if backpack:FindFirstChild("[RPG]") then
+			if not reportedPlayers[player] then
+				local timestamp = os.date("[%Y-%m-%d %H:%M:%S EST] ")
+				print(timestamp .. player.Name .. " Has the RPG in their backpack")
+				reportedPlayers[player] = true
+			end
+		else
+			if reportedPlayers[player] then
+				local timestamp = os.date("[%Y-%m-%d %H:%M:%S EST] ")
+				print(timestamp .. player.Name .. " Has equipped the RPG")
+				reportedPlayers[player] = nil
+			end
+		end
+	end
+	wait(1)
+end
